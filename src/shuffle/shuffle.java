@@ -8,7 +8,12 @@ package shuffle;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.Timer;
 
 /**
  *
@@ -19,6 +24,10 @@ public class shuffle extends javax.swing.JFrame {
     Dimension d = new Dimension(); // the window appears in the middle of the screen
     Toolkit t = Toolkit.getDefaultToolkit(); // the window appears in the middle of the screen
     int x, y; // the window appears in the middle of the screen
+    static final int delay = 10000; //milliseconds
+    ActionListener taskPerformer = (ActionEvent evt) -> {
+        //...Perform a task...
+    };
 
     /**
      * Creates new form gui
@@ -29,7 +38,6 @@ public class shuffle extends javax.swing.JFrame {
         x = t.getScreenSize().width;
         y = t.getScreenSize().height;
         this.setLocation(x / 2 - (this.getSize().width), y / 2 - (this.getSize().height));
-        UndoB.setBackground(Color.red);
     }
 
     /**
@@ -121,84 +129,13 @@ public class shuffle extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void shuffleBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shuffleBActionPerformed
-        if (PathTA.getText().equals("")) {
-            PathTA.setBackground(Color.red);
-        } else {
-            File folder = new File(PathTA.getText());
-            File[] listOfFiles = folder.listFiles();
-            int[] numbers = new int[listOfFiles.length];
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) {
-                    if (shuffleCB.getSelectedIndex() == 0) {
-                        double r = Math.random() * listOfFiles.length;
-                        int rnd = (int) r;
-                        while ((rnd < numbers.length) && (numbers[rnd] == 1)) {
-                            rnd++;
-                        }
-                        if (rnd == numbers.length) {
-                            rnd--;
-                            while ((rnd >= 0) && (numbers[rnd] == 1)) {
-                                rnd--;
-                            }
-                        }
-                        String newPath = listOfFiles[i].getAbsolutePath();
-                        String[] arr = newPath.split("\\\\");
-                        arr[arr.length - 1] = (rnd + 1)+"-" + arr[arr.length - 1];
-                        newPath = "";
-                        for (int j = 0; j < arr.length - 1; j++) {
-                            newPath += arr[j] + "\\";
-                        }
-                        newPath += arr[arr.length - 1];
-                        File NewName = new File(newPath);
-                        listOfFiles[i].renameTo(NewName);
-                        numbers[rnd] = 1;
-                    } else {
-                        String newPath = listOfFiles[i].getAbsolutePath();
-                        String[] arr = newPath.split("\\\\");
-                        arr[arr.length - 1] = (i + 1)+"-" + arr[arr.length - 1];
-                        newPath = "";
-                        for (int j = 0; j < arr.length - 1; j++) {
-                            newPath += arr[j] + "\\";
-                        }
-                        newPath += arr[arr.length - 1];
-                        File NewName = new File(newPath);
-                        listOfFiles[i].renameTo(NewName);
-                    }
-                    PathTA.setBackground(Color.GREEN);
-                } else if (listOfFiles[i].isDirectory()) {
-                    System.out.println("Directory " + listOfFiles[i].getName());
-                }
-            }
-        }
+        shuffleB.setBackground(logic.ShuffleAlgo(PathTA.getText(), (shuffleCB.getSelectedIndex() == 0)));
+        UndoB.setBackground(new JButton().getBackground());
     }//GEN-LAST:event_shuffleBActionPerformed
 
     private void UndoBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UndoBActionPerformed
-        if (PathTA.getText().equals("")) {
-            PathTA.setBackground(Color.red);
-        } else {
-            File folder = new File(PathTA.getText());
-            File[] listOfFiles = folder.listFiles();
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) {
-                    String newPath = listOfFiles[i].getAbsolutePath();
-                    String[] arr = newPath.split("\\\\");
-                    String[] temp =  arr[arr.length - 1].split("-");
-                    arr[arr.length - 1] = "";
-                    for (int j = 1; j < temp.length-1; j++) {
-                        arr[arr.length - 1] += temp[j]+"-";
-                    }
-                    arr[arr.length - 1] += temp[temp.length-1];
-                    newPath = "";
-                    for (int j = 0; j < arr.length - 1; j++) {
-                        newPath += arr[j] + "\\";
-                    }
-                    newPath += arr[arr.length - 1];
-                    File NewName = new File(newPath);
-                    listOfFiles[i].renameTo(NewName);
-                    PathTA.setBackground(Color.blue);
-                }
-            }
-        }
+        UndoB.setBackground(logic.UndoAlgo(PathTA.getText()));
+        shuffleB.setBackground(new JButton().getBackground());
     }//GEN-LAST:event_UndoBActionPerformed
 
     /**
@@ -220,24 +157,18 @@ public class shuffle extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(shuffle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(shuffle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(shuffle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(shuffle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
 
+        //</editor-fold>
+        //</editor-fold>
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new shuffle().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new shuffle().setVisible(true);
         });
     }
 
