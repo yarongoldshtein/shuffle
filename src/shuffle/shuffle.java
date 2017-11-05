@@ -5,15 +5,9 @@
  */
 package shuffle;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.Timer;
 
 /**
  *
@@ -24,10 +18,6 @@ public class shuffle extends javax.swing.JFrame {
     Dimension d = new Dimension(); // the window appears in the middle of the screen
     Toolkit t = Toolkit.getDefaultToolkit(); // the window appears in the middle of the screen
     int x, y; // the window appears in the middle of the screen
-    static final int delay = 10000; //milliseconds
-    ActionListener taskPerformer = (ActionEvent evt) -> {
-        //...Perform a task...
-    };
 
     /**
      * Creates new form gui
@@ -55,6 +45,7 @@ public class shuffle extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         shuffleCB = new javax.swing.JComboBox<>();
         UndoB = new javax.swing.JButton();
+        DeleteB = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("shuffle");
@@ -79,6 +70,13 @@ public class shuffle extends javax.swing.JFrame {
             }
         });
 
+        DeleteB.setText("Delete");
+        DeleteB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,7 +94,9 @@ public class shuffle extends javax.swing.JFrame {
                         .addComponent(shuffleCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(53, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(176, 176, 176)
+                .addGap(34, 34, 34)
+                .addComponent(DeleteB)
+                .addGap(63, 63, 63)
                 .addComponent(shuffleB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(UndoB)
@@ -113,14 +113,20 @@ public class shuffle extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(shuffleCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(shuffleB)
-                        .addGap(44, 44, 44))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(UndoB)
-                        .addGap(21, 21, 21))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(shuffleB)
+                                .addGap(44, 44, 44))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(UndoB)
+                                .addGap(21, 21, 21))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(DeleteB)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         getAccessibleContext().setAccessibleName("");
@@ -137,6 +143,11 @@ public class shuffle extends javax.swing.JFrame {
         UndoB.setBackground(logic.UndoAlgo(PathTA.getText()));
         shuffleB.setBackground(new JButton().getBackground());
     }//GEN-LAST:event_UndoBActionPerformed
+
+    private void DeleteBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBActionPerformed
+        delete d = new delete(PathTA.getText());
+        d.setVisible(true);
+    }//GEN-LAST:event_DeleteBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,6 +184,7 @@ public class shuffle extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton DeleteB;
     private javax.swing.JTextField PathTA;
     private javax.swing.JButton UndoB;
     private javax.swing.JLabel jLabel1;
