@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package shuffle;
 
 import java.awt.Color;
@@ -13,7 +13,7 @@ import java.io.File;
  * @author yaron
  */
 public class logic {
-
+    
     public static Color ShuffleAlgo(String Path, boolean ToShuffle) {
         if (Path.equals("")) {
             return Color.RED;
@@ -76,7 +76,7 @@ public class logic {
             return Color.GREEN;
         }
     }
-
+    
     public static Color UndoAlgo(String Path) {
         if (Path.equals("")) {
             return Color.RED;
@@ -88,6 +88,11 @@ public class logic {
                     String newPath = listOfFiles[i].getAbsolutePath();
                     String[] arr = newPath.split("\\\\");
                     String[] temp = arr[arr.length - 1].split("-");
+                    try{
+                        Integer.parseInt(temp[0]);
+                    } catch (NumberFormatException e) {
+                        continue;
+                    }
                     arr[arr.length - 1] = "";
                     for (int j = 1; j < temp.length - 1; j++) {
                         arr[arr.length - 1] += temp[j] + "-";
@@ -104,5 +109,77 @@ public class logic {
             }
             return Color.GREEN;
         }
+    }
+    public static Color organizeAlgo(String Path) {
+        if (Path.equals("")) {
+            return Color.RED;
+        } else {
+            File folder = new File(Path);
+            File[] listOfFiles = folder.listFiles();
+            int biggest = biggestNumber(listOfFiles);
+            int bigger = biggest > listOfFiles.length ? biggest : listOfFiles.length;
+            boolean[] bucket = new boolean[bigger];
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile()) {
+                    String newPath = listOfFiles[i].getAbsolutePath();
+                    String[] arr = newPath.split("\\\\");
+                    String[] temp = arr[arr.length - 1].split("-");
+                    try{
+                        Integer.parseInt(temp[0]);
+                        bucket[Integer.parseInt(temp[0]) - 1] = true;
+                    } catch (NumberFormatException e) {
+                        continue;
+                    }
+                }
+            }
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile()) {
+                    String newPath = listOfFiles[i].getAbsolutePath();
+                    String[] arr = newPath.split("\\\\");
+                    String[] temp = arr[arr.length - 1].split("-");
+                    try{
+                        Integer.parseInt(temp[0]);
+                        continue;
+                    } catch (NumberFormatException e) {
+                    }
+                    for (int j = 0; j < bucket.length; j++) {
+                        if (!bucket[j]) {
+                            bucket[j] = true;
+                            arr[arr.length - 1] = (j + 1) + "-" + arr[arr.length - 1];
+                            newPath = "";
+                            for (int k = 0; k < arr.length - 1; k++) {
+                                newPath += arr[k] + "\\";
+                            }
+                            newPath += arr[arr.length - 1];
+                            File NewName = new File(newPath);
+                            listOfFiles[i].renameTo(NewName);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return Color.GREEN;
+    }
+    
+    private static int biggestNumber(File[] listOfFiles){
+        int biggest = 0;
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
+                String newPath = listOfFiles[i].getAbsolutePath();
+                String[] arr = newPath.split("\\\\");
+                String[] temp = arr[arr.length - 1].split("-");
+                try{
+                    int num = Integer.parseInt(temp[0]);
+                   if (num > biggest){
+                       biggest = num;
+                   }
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+            }
+        }
+        return biggest;
     }
 }
